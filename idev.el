@@ -11,6 +11,7 @@
 (require 'dired)
 
 
+;;;###autoload
 (defun idev:sget ()
 	(interactive)
 	(ivy-read "sget file:" (process-lines "vls")
@@ -18,13 +19,14 @@
 											(shell-command (format "sg %s" x)))
 						:caller 'idev:sget))
 
+;;;###autoload
 (defun idev:sget-project-files ()
 	(interactive)
 	(ivy-read "sget file:" (process-lines "vfiles")
 						:action (lambda (x)
 											(shell-command (format "getfile %s" x)))
 						:caller 'idev:sget-project-files))
-
+;;;###autoload
 (defun idev:file-history-old ()
 	(interactive)
 	(ivy-read "history for:" (process-lines "vfiles")
@@ -67,15 +69,18 @@
 (defun idev:from-line (line)
 	(nth 0 (split-string line "\\s-+")))
 
+;;;###autoload
 (defun idev:choose-mr ()
 	(interactive)
 	(let ((def-args (format "-d dan -g %s" (getenv "sabGEN"))))
 		(idev:mr-action (lambda (x) (idev:set-mr (idev:from-line x))) def-args)))
 
+;;;###autoload
 (defun idev:show-off ()
 	(interactive)
 	(message (format "OFF=%s" (getenv "OFF"))))
 
+;;;###autoload
 (defun idev:get-mr-number (my-string)
 	"Match the MR number if sable command output"
 	(message "Asdfasdfasdf")
@@ -83,6 +88,7 @@
 		(and (string-match my-regexp my-string)
 				 (list (match-string 1 my-string) (match-string 3 my-string)))))
 
+;;;###autoload
 (defun idev:fcreate ()
 	"Create MR"
 	(interactive)
@@ -312,11 +318,13 @@
 	(interactive)
 	(shell-command (format "eg %s" (file-name-nondirectory (dired-get-file-for-visit)))))
 
+;;;###autoload
 (defun idev:dired-edput ()
 	"Run edput for the current dired file and display output in shell buffer."
 	(interactive)
 	(shell-command (format "ep %s" (file-name-nondirectory (dired-get-file-for-visit)))))
 
+;;;###autoload
 (defun idev:dired-sget ()
 	"Select a file to sget"
 	(interactive)
@@ -325,7 +333,7 @@
 											(shell-command (format "getfile %s" x)))
 						:caller 'sablime-sget-project-files))
 
-
+;;;###autoload
 (defun idev:make-project ()
 	"Create a new Project"
 	(interactive)
@@ -338,6 +346,9 @@
 		(process-file-shell-command (format "my-setnode %s" base))
 		(process-file-shell-command (concat "echo " gen " >" base "/.gen"))
 		(idev:switch-project gen basename base)))
+
+(bind-keys :map global-map
+	   	("C-l O" . idev:show-off))
 
 
 (provide 'idev)
