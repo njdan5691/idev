@@ -347,7 +347,7 @@
 		(process-file-shell-command (concat "echo " gen " >" base "/.gen"))
 		(idev:switch-project gen basename base)))
 
-(bind-keys :map zz:idev-prefix
+(bind-keys :map global-map
 	   	("C-l O" . idev:show-off))
 
 
