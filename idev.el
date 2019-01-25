@@ -347,7 +347,7 @@
 (bind-keys :map global-map
            :prefix-map idev-prefix
            :prefix "C-l"
-           ("O" . idev:show-off)
+           ("l" . load-file)
            ("p" . idev:select-project)
            ("y" . idev:mr-command)
            ("f" . idev:fcreate)
