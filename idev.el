@@ -11,7 +11,7 @@
 (require 'dired)
 (require 'bind-key)
 
-
+;;;###autoload
 (defun idev:sget ()
 	(interactive)
 	(ivy-read "sget file:" (process-lines "vls")
@@ -340,6 +340,7 @@
 		(process-file-shell-command (concat "echo " gen " >" base "/.gen"))
 		(idev:switch-project gen basename base)))
 
+;;;###autoload
 (defun idev:setup-binding()
 	"Setup Default bindings"
 	(interactive)
