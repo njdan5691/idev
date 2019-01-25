@@ -340,7 +340,9 @@
 		(process-file-shell-command (concat "echo " gen " >" base "/.gen"))
 		(idev:switch-project gen basename base)))
 
-
+(defun idev:setup-binding()
+	"Setup Default bindings"
+	(interactive)
 (bind-keys :map global-map
            :prefix-map idev-prefix
            :prefix "C-l"
@@ -371,7 +373,7 @@
            ("C-c s" . idev:dired-sget)
            ("C-l c" . compile)
            ("C-c e" . idev:dired-edget))
-
+)
 
 (provide 'idev)
 ;;; idev.el ends here
