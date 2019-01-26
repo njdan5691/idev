@@ -340,7 +340,7 @@
 		(process-file-shell-command (concat "echo " gen " >" base "/.gen"))
 		(idev:switch-project gen basename base)))
 
-;;;###autoload (autoload 'idev-prefix "idev")
+;;;###autoload (autoload 'idev-prefix "idev/idev")
 
 
 (bind-keys :map global-map
