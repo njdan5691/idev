@@ -18,7 +18,7 @@
 						:action (lambda (x)
 											(shell-command (format "sg %s" x)))
 						:caller 'idev:sget))
-
+;;;###autoload
 (defun idev:sget-project-files ()
 	(interactive)
 	(ivy-read "sget file:" (process-lines "vfiles")
@@ -26,6 +26,7 @@
 											(shell-command (format "getfile %s" x)))
 						:caller 'idev:sget-project-files))
 
+;;;###autoload
 (defun idev:file-history-old ()
 	(interactive)
 	(ivy-read "history for:" (process-lines "vfiles")
@@ -33,6 +34,7 @@
 											(shell-command (format "file-history %s" x)))
 						:caller 'idev:file-history))
 
+;;;###autoload
 (defun idev:file-history ()
 	""
 	(interactive)
@@ -43,47 +45,54 @@
 		(pop-to-buffer diff-buffer-name)
 		(diff-mode)))
 
+;;;###autoload
 (defun idev:list-mrs (status &optional dev)
 	(if dev
 			(sort (process-lines "idev-mrlist" "-d" dev "-s" status "-g" (getenv "sabGEN")) 'string>)
 		(sort (process-lines "idev-mrlist" "-s" status "-g" (getenv "sabGEN")) 'string>)))
 
+;;;###autoload
 (defun idev:list-all-mrs (&optional dev)
 	(if dev
 			(sort (process-lines "idev-mrlist" "-d" dev "-g" (getenv "sabGEN")) 'string>)
 		(sort (process-lines "idev-mrlist" "-g" (getenv "sabGEN")) 'string>)))
 
 
+;;;###autoload
 (defun idev:mr-action (action &optional args)
 	(let* ((command (if args (concat "idev-mrlist " args) "idev-mrlist"))
 				 (command-args (split-string command "\\s-+")))
 		(ivy-read  "MR:" (sort (apply 'process-lines command-args) 'string>)
 							 :action action
 							 :caller 'idev:mr-action)))
-
+;;;###autoload
 (defun idev:set-mr (mr)
 	(setenv "mr" mr)
 	(process-file-shell-command (concat "echo " mr " >~/.dotfiles/mr")))
 
+;;;###autoload
 (defun idev:from-line (line)
 	(nth 0 (split-string line "\\s-+")))
 
+;;;###autoload
 (defun idev:choose-mr ()
 	(interactive)
 	(let ((def-args (format "-d dan -g %s" (getenv "sabGEN"))))
 		(idev:mr-action (lambda (x) (idev:set-mr (idev:from-line x))) def-args)))
 
+;;;###autoload
 (defun idev:show-off ()
 	(interactive)
 	(message (format "OFF=%s" (getenv "OFF"))))
 
+;;;###autoload
 (defun idev:get-mr-number (my-string)
 	"Match the MR number if sable command output"
 	(message "Asdfasdfasdf")
 	(let ((my-regexp "\\[\\[\\([^][]+\\)\\]\\(\\[\\([^][]+\\)\\]\\)?\\]"))
 		(and (string-match my-regexp my-string)
 				 (list (match-string 1 my-string) (match-string 3 my-string)))))
-
+;;;###autoload
 (defun idev:fcreate ()
 	"Create MR"
 	(interactive)
