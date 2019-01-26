@@ -350,40 +350,6 @@
 		(idev:switch-project gen basename base)))
 
 
-;;;###autoload (define-key idev-prefix "y" 'idev:mr-command)
-
-
-(bind-keys :map global-map
-           :prefix-map idev-prefix
-           :prefix "C-l"
-           ("l" . load-file)
-           ("p" . idev:select-project)
-           ("y" . idev:mr-command)
-           ("f" . idev:fcreate)
-           ("s" . idev:submit)
-           ("w" . idev:choose-mr)
-           ("i" . idev:inc-grep)
-           ("g" . idev:sget)
-           ("G" . idev:sget-project-files)
-           ("C" . idev:change-generic)
-           ("C-l" . recenter))
-
-
-(bind-keys :map idev-prefix
-           :prefix-map idev-project-prefix
-           :prefix "P"
-           ("m" . idev:make-project)
-           ("u" . idev:unfreeze-project)
-           ("e" . idev:file-history)
-           ("f" . idev:freeze-project))
-
-(bind-keys :map dired-mode-map
-           ("C-c d" . idev:dired-sdiff)
-           ("C-c p" . idev:dired-edput)
-           ("C-c s" . idev:dired-sget)
-           ("C-l c" . compile)
-           ("C-c e" . idev:dired-edget))
-
 
 (provide 'idev)
 ;;; idev.el ends here
