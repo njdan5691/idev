@@ -349,7 +349,8 @@
 		(process-file-shell-command (concat "echo " gen " >" base "/.gen"))
 		(idev:switch-project gen basename base)))
 
-;;;###autoload (autoload 'idev-prefix "idev/idev" nil nil "keymap")
+
+;;;###autoload (define-key idev-prefix "y" 'idev:mr-command)
 
 
 (bind-keys :map global-map
