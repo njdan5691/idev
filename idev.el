@@ -11,6 +11,14 @@
 (require 'dired)
 (require 'bind-key)
 
+;;;###autoload                                                                                      
+(defun idev:inc-files ()
+  (interactive)
+  (ivy-read "file:" (process-lines "incfiles")
+            :action (lambda (x)
+                      (find-file x)))
+            :caller 'idev:inc-files)  
+
 ;;;###autoload
 (defun idev:sget ()
 	(interactive)
@@ -113,7 +121,7 @@
 		(shell-command fcreate-command)
 		(delete-file desc-file)))
 
-
+;;;###autoload
 (defun idev:freeze-project ()
 	"Select an Active Project to freeze."
 	(interactive)
@@ -121,7 +129,7 @@
 						:action (lambda (x) (shell-command (format "freeze %s" x)))
 						:caller 'idev:freeze-project))
 
-
+;;;###autoload
 (defun idev:unfreeze-project ()
 	"Select a Frozen Project to unfreeze."
 	(interactive)
@@ -129,7 +137,7 @@
 						:action (lambda (x) (shell-command (format "unfreeze %s" x)))
 						:caller 'idev:unfreeze-project))
 
-
+;;;###autoload
 (defun idev:toggle-tab-width ()
 	(interactive)
 	(cond ((= 8 tab-width) (setq tab-width 1))
@@ -147,6 +155,7 @@
 ;; 	(interactive)
 ;; 	(counsel-ag (thing-at-point 'symbol) (getenv "OFF") " --js --cc --make --cpp --html --shell" "Search: "))
 
+;;;###autoload
 (defun idev:inc-grep-v1 ()
 	"Search for a pattern in $OFF directory using ag.
     INITIAL-INPUT can be given as the initial minibuffer input."
@@ -154,7 +163,7 @@
 	(let* ((dir (ivy-read "Dir:" (cons (getenv "OFF") '("/usr/include" ".")))))
 		(counsel-ag (thing-at-point 'symbol) dir " --cc --cpp --js --cpp --html --shell" "Search:")))
 
-
+;;;###autoload
 (defun idev:inc-grep ()
 	"Search for a pattern in $OFF directory using ag.
     INITIAL-INPUT can be given as the initial minibuffer input."
@@ -164,11 +173,12 @@
 		(counsel-ag (thing-at-point 'symbol) dir " --cc --cpp --js --cpp --html --shell" "Search:")))
 
 
-
+;;;###autoload
 (defun idev:find-at-point ()
 	(interactive)
 	(counsel-grep-or-swiper (format "\\<%s\\>" (thing-at-point 'symbol))))
 
+;;;###autoload
 (defun idev:ask-emacs (&optional initial-input)
 	"Search for a pattern in emacs 'info/' directory using ag.
     INITIAL-INPUT can be given as the initial minibuffer input."
@@ -179,11 +189,13 @@
 
 ;; Version of ivy-completing-read that does not sort
 ;;
+;;;###autoload
 (defun idev:ivy-completing-read (&rest args)
   (let ((ivy-sort-functions-alist '((t . nil))))
     (apply 'ivy-completing-read args)))
 
 
+;;;###autoload
 (defun idev:change-generic ()
 	"Change the generic the Project is in"
 	(interactive)
@@ -191,7 +203,7 @@
 		(process-file-shell-command (concat "echo " gen " >" (getenv "BASE") "/.gen"))))
 
 
-
+;;;###autoload
 (defun idev:submit (mrinfo g reso)
 	"Submit an Mr"
 	(interactive (list
@@ -208,7 +220,7 @@
 														 "mr=%s g=%s rfile=%s" mr g rfile)))
 		(delete-file rfile)))
 
-
+;;;###autoload
 (defun idev:mr-command (mrinfo command)
 	"Print MR Report"
 	(interactive
@@ -223,19 +235,21 @@
 		(pop-to-buffer mr-buffer-name)
 		(text-mode)))
 
+;;;###autoload
 (defun idev:reformat-c-buffer()
   (interactive)
   (save-excursion
     (delete-trailing-whitespace)
     (indent-region (point-min) (point-max) nil)))
 
-
+;;;###autoload
 (defun idev:indent-c-buffer()
   (interactive)
   (setq sh-indent-command (concat
                            "indent -st "
                            buffer-file-name)))
 
+;;;###autoload
 (defun idev:indent-json-buffer()
   (interactive)
   (setq sh-indent-command (concat
@@ -243,22 +257,25 @@
                            buffer-file-name)))
 
 
-
+;;;###autoload
 (defun idev:make-name-from-desc (desc)
 	(downcase (replace-regexp-in-string "[[:space:]]+" "-" desc)))
 
+;;;###autoload
 (defun idev:remove-newline (s)
 	(if (string-match "[\t\n\r]+\\'" s)
 			(replace-match "" t t s) s))
 
 
 ;;
+;;;###autoload
 (defun idev:string-from-file (filePath)
   "Return filePath's file content."
   (with-temp-buffer
     (insert-file-contents filePath)
     (buffer-string)))
 
+;;;###autoload
 (defun idev:sh-oneliner (command)
 	(let ((output (shell-command-to-string command)))
 		(if (string-match "[\t\n\r]+\\'" output)
