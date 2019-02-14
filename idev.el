@@ -280,32 +280,38 @@
 	(let ((output (shell-command-to-string command)))
 		(if (string-match "[\t\n\r]+\\'" output)
 				(replace-match "" t t output))))
-
-
-;;
+;;;###autoload
 (defun idev:switch-project (gen basename base)
-	(let ((node (format "/inc/%s/%s" gen basename)))
-		(setenv "sabGEN" gen)
-		(setenv "GTAGSDBPATH" (concat node "/xref/gtags"))
-		(setenv "OFF" node)
-		(setenv "GTAGSROOT" node)
-		(setenv "BASE" base)
-		(setenv "BUILDNODE" base)
-		(setenv "CDPATH" (format ":.:%s" base))
-		(process-file-shell-command (concat "echo " node " >~/.INC-node"))
-		(process-file-shell-command (concat "echo " base " >~/.dotfiles/basenode"))
-		(setenv "VPATH" (idev:sh-oneliner "vpath"))
-		(find-file base)))
+  (let ((node (format "/inc/%s/%s" gen basename)))
+    (setenv "OFF" node)
+    (setenv "sabGEN" gen)
+    (setenv "GTAGSDBPATH" (concat node "/xref/gtags"))
+    (setenv "GTAGSROOT" node)
+    (if (string-match "_patch" node)
+        (let* ((parts (split-string node "_patch"))
+               (off (nth 0 parts)))
+          (setenv "OFF" off)
+          (setenv "PATCHOFF" gen)
+          (setenv "GTAGSDBPATH" (concat off "/xref/gtags"))
+          (setenv "GTAGSROOT" off)
+          (setenv "GTAGSLIBPATH" (format "%s/xref/gtags" node))))
+    (setenv "BASE" base)
+    (setenv "BUILDNODE" base)
+    (setenv "CDPATH" (format ":.:%s" base))
+    (process-file-shell-command (concat "echo " node " >~/.INC-node"))
+    (process-file-shell-command (concat "echo " base " >~/.dotfiles/basenode"))
+    (setenv "VPATH" (idev:sh-oneliner "vpath"))
+    (find-file base)))
 
 
 
-;;
+;;;###autoload
 (defun idev:latest-node (gen)
 	(let ((node (shell-command-to-string (format "latest-node %s" gen))))
 		(if (string-match "[\t\n\r]+\\'" node)
 				(replace-match "" t t node))))
 
-;;
+;;;###autoload
 (defun idev:project-generic (proj)
 	(let ((genfile (format "~/inc/%s/.gen" proj)))
 		(if (file-exists-p genfile)
@@ -313,7 +319,7 @@
 					(if (string-match  "[\t\n\r]+\\'" s)
 							(replace-match "" t t s))) "inc35.1")))
 
-;;
+;;;###autoload
 (defun idev:select-project()
 	"Select node to work in."
 	(interactive)
