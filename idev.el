@@ -20,6 +20,15 @@
             :caller 'idev:inc-files)  
 
 ;;;###autoload
+(defun idev:base-files ()
+  (interactive)
+  (ivy-read "file:" (process-lines "basefiles")
+            :action (lambda (x)
+                      (find-file x)))
+  :caller 'idev:base-files)
+
+
+;;;###autoload
 (defun idev:sget ()
 	(interactive)
 	(ivy-read "sget file:" (process-lines "vls")
