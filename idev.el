@@ -178,8 +178,8 @@
     INITIAL-INPUT can be given as the initial minibuffer input."
 	(interactive)
 	(let* ((off (getenv "OFF"))
-				 (dir (ivy-read "Dir:" (list off (format "%s/include" off ) (format "%s/common/include" off) (format "%s/gui/web/js" off) (format "%s/gui" off) "/usr/include" "."))))
-		(counsel-ag (thing-at-point 'symbol) dir " --cc --cpp --js --cpp --html --shell" "Search:")))
+				 (dir (ivy-read "Dir:" (list off (format "%s/include" off ) (format "%s/common/include" off) (format "%s/gui/web/js" off) (format "%s/gui/src/web" off) (format "%s/gui" off) "/usr/include" "."))))
+		(counsel-ag (thing-at-point 'symbol) dir " --cc --cpp --js --make --cpp --html --shell" "Search:")))
 
 
 ;;;###autoload
