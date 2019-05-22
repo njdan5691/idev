@@ -158,38 +158,28 @@
 
 
 
-;; (defun idev:inc-grep-v0 ()
-;; 	"Search for a pattern in $OFF directory using ag.
+
+;; (defun idev:inc-grep ()
+;;   "Search for a pattern in $OFF directory using ag.
 ;;     INITIAL-INPUT can be given as the initial minibuffer input."
-;; 	(interactive)
-;; 	(counsel-ag (thing-at-point 'symbol) (getenv "OFF") " --js --cc --make --cpp --html --shell" "Search: "))
-
-;;;###autoload
-(defun idev:inc-grep-v1 ()
-	"Search for a pattern in $OFF directory using ag.
-    INITIAL-INPUT can be given as the initial minibuffer input."
-	(interactive)
-	(let* ((dir (ivy-read "Dir:" (cons (getenv "OFF") '("/usr/include" ".")))))
-		(counsel-ag (thing-at-point 'symbol) dir " --cc --cpp --js --cpp --html --shell" "Search:")))
-
-;;;###autoload
-;;(defun idev:inc-grep ()
-;;	"Search for a pattern in $OFF directory using ag.
-;;    INITIAL-INPUT can be given as the initial minibuffer input."
-;;	(interactive)
-;;	(let* ((off (getenv "OFF"))
-;;				 (dir (ivy-read "Dir:" (list off (format "%s/include" off ) (format "%s/common/include" off) (format "%s/gui/web/js" off) (format "%s/gui/src/web" off) (format "%s/gui" off) "/usr/include" "."))))
-;;		(counsel-ag (thing-at-point 'symbol) dir " --cc --cpp --js --make --cpp --html --shell" "Search:")))
+;;   (interactive)
+;;   (let* ((off (getenv "OFF"))
+;;          (dir (ivy-read "Dir:" (process-lines "/usr/cnc/tools/bin/fd" "--type" "d" "-d" "2" "." (getenv "OFF")))))
+;;     (counsel-rg (thing-at-point 'symbol) dir "" "Search:")))                                                                                                                               
 
 
 ;;;###autoload                                                                                                                                                                                
-(defun idev:inc-grep ()
+(defun idev:inc-grep (&optional dir)
   "Search for a pattern in $OFF directory using ag.                                                                                                                                           
     INITIAL-INPUT can be given as the initial minibuffer input."
-  (interactive)
-  (let* ((off (getenv "OFF"))
-         (dir (ivy-read "Dir:" (process-lines "/usr/cnc/tools/bin/fd" "--type" "d" "-d" "2" "." (getenv "OFF")))))
-    (counsel-rg (thing-at-point 'symbol) dir "" "Search:")))
+  (interactive (list (if current-prefix-arg
+                         (ivy-read "Dir:" (process-lines
+                                           "fd" "--type" "d" "-d" "2" "." (getenv "OFF")))
+                       nil)))
+  (if dir
+      (counsel-rg (thing-at-point 'symbol) dir "" "Search:")
+    (counsel-rg (thing-at-point 'symbol) (getenv "OFF") "" "Search:")))
+
 
 
 
