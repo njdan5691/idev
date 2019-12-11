@@ -109,6 +109,30 @@
 	(let ((my-regexp "\\[\\[\\([^][]+\\)\\]\\(\\[\\([^][]+\\)\\]\\)?\\]"))
 		(and (string-match my-regexp my-string)
 				 (list (match-string 1 my-string) (match-string 3 my-string)))))
+
+;;;###autoload
+(defun idev:edit-string (value)
+  "Edits string and returns it"
+  (let ((this-buffer (buffer-name))
+        (new-value value)
+        (buffy "*edit-string*"))
+    (save-excursion
+      (switch-to-buffer buffy)
+      (set-buffer buffy)
+      (text-mode)
+      (local-set-key (kbd "C-c C-c") 'exit-recursive-edit)
+      (if (stringp value) (insert value))
+      (message "When you're done editing press C-c C-c or C-M-c to continue.")
+      (unwind-protect
+          (recursive-edit)
+        (if (get-buffer-window buffy)
+            (progn
+              (setq new-value (buffer-substring (point-min) (point-max)))
+              (kill-buffer buffy))))
+      (switch-to-buffer this-buffer)
+      new-value)))
+
+
 ;;;###autoload
 (defun idev:fcreate ()
 	"Create MR"
@@ -120,7 +144,8 @@
 				 (sys (read-string "Product System:" "core"))
 				 (abst (read-string "Abstract:" "DEV:"))
 				 (qabst (shell-quote-argument abst))
-				 (desc (read-string "Description:" abst))
+				 ;;(desc (read-string "Description:" abst))
+				 (desc (idev:edit-string (idev:string-from-file "/home/dan/var/def-mr-description")))
 				 (base-cmd (format "%s/fcreate prompt=n site=\"LightRiver Software\" pd=development cat=dev_found" (getenv "sabLCB")))
 				 (desc-file (make-temp-file "sablime"))
 				 (fcreate-format "%s rel=%s sev=%s class=%s g=%s sys=%s abst=%s desc=%s")
