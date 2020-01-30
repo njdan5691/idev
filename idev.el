@@ -238,22 +238,27 @@
 		(process-file-shell-command (concat "echo " gen " >" (getenv "BASE") "/.gen"))))
 
 
+
 ;;;###autoload
 (defun idev:submit (mrinfo g reso)
-	"Submit an Mr"
-	(interactive (list
-								(idev:ivy-completing-read "Mr:" (idev:list-mrs "assigned" "dan") nil t)
-								(read-string "Generic:" (getenv "sabGEN"))
-								(read-string "Resolution:")))
-	(let* ((rfile (make-temp-file "sablime"))
-				 (parts (split-string mrinfo " "))
-				 (mr (nth 0 parts)))
-		(process-file-shell-command (concat "echo " reso ">" rfile))
-		(set-file-modes rfile #o644)
-		(shell-command (concat  (getenv "sabLCB") "/submit prompt=n "
-														(format
-														 "mr=%s g=%s rfile=%s" mr g rfile)))
-		(delete-file rfile)))
+  "Submit an Mr"
+  (interactive (list
+                (idev:ivy-completing-read "Mr:" (idev:list-mrs "assigned" "dan") nil t)
+                (read-string "Generic:" (getenv "sabGEN"))
+                (elispm:simplified-read-mb-lines-def "" (idev:string-from-file "/home/dan/var/def-mr-resolution"))))
+  (let* ((rfile (make-temp-file "sablime"))
+         (parts (split-string mrinfo " "))
+         (mr (nth 0 parts)))
+    (write-region reso nil rfile)
+    (set-file-modes rfile #o644)
+    (shell-command (concat  (getenv "sabLCB") "/submit prompt=n "
+                            (format "mr=%s g=%s rfile=%s" mr g rfile)))
+    (delete-file rfile)))
+
+
+
+
+
 
 ;;;###autoload
 (defun idev:mr-command (mrinfo command)
