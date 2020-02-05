@@ -183,29 +183,20 @@
 
 
 
+;;;###autoload
+(defun idev:inc-dir ()
+  "Select directory under dir"
+  (interactive)
+  (let ((dir (ivy-read "Top Dir:" (split-string (getenv "VPATH") ":"))))
+    (ivy-read "Dir:" (process-lines "fd" "--type" "d" "-d" "2" "." dir))))
 
-;; (defun idev:inc-grep ()
-;;   "Search for a pattern in $OFF directory using ag.
-;;     INITIAL-INPUT can be given as the initial minibuffer input."
-;;   (interactive)
-;;   (let* ((off (getenv "OFF"))
-;;          (dir (ivy-read "Dir:" (process-lines "/usr/cnc/tools/bin/fd" "--type" "d" "-d" "2" "." (getenv "OFF")))))
-;;     (counsel-rg (thing-at-point 'symbol) dir "" "Search:")))                                                                                                                               
-
-
-;;;###autoload                                                                                                                                                                                
+;;;###autoload
 (defun idev:inc-grep (&optional dir)
-  "Search for a pattern in $OFF directory using ag.                                                                                                                                           
+  "Search for a pattern in $OFF directory using ag.
     INITIAL-INPUT can be given as the initial minibuffer input."
-  (interactive (list (if current-prefix-arg
-                         (ivy-read "Dir:" (process-lines
-                                           "fd" "--type" "d" "-d" "2" "." (getenv "OFF")))
-                       nil)))
-  (if dir
-      (counsel-rg (thing-at-point 'symbol) dir "" "Search:")
-    (counsel-rg (thing-at-point 'symbol) (getenv "OFF") "" "Search:")))
-
-
+  (interactive)
+  (let ((dir (idev:inc-dir)))
+    (counsel-rg (thing-at-point 'symbol) dir "" "Search:")))
 
 
 ;;;###autoload
