@@ -314,6 +314,13 @@
 ;;;###autoload
 (defun idev:switch-project (gen basename base)
   (let ((node (format "/inc/%s/%s" gen basename)))
+       (call-interactively (lambda ()
+                          (interactive)
+                          (setenv "PATCHOFF")
+                          (setenv "PATCHDEPOT")
+                          (setenv "PREPATCHOFF")
+                          ))
+
     (setenv "OFF" node)
     (setenv "sabGEN" gen)
     (setenv "GTAGSDBPATH" (concat node "/xref/gtags"))
