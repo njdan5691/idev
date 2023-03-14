@@ -31,7 +31,7 @@
 ;;;###autoload
 (defun idev:sget ()
 	(interactive)
-	(ivy-read "sget file:" (process-lines "vls")
+	(ivy-read "sget file:" (process-lines "sab-vls")
 						:action (lambda (x)
 											(shell-command (format "sg %s" x)))
 						:caller 'idev:sget))
